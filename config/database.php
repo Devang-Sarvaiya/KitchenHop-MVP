@@ -3,7 +3,7 @@
 $host = "sql105.byethost7.com";
 $dbname = "b7_41364403_b1234567_kitchenhop";
 $username = "b7_41364403";
-$password = "Devang_2026";
+$password = "YOUR_DB_PASSWORD";
 
 try {
 
