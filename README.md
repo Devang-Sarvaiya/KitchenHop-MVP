@@ -21,6 +21,21 @@ https://devang.byethost7.com/
 - **Frontend:** HTML5, CSS3, Bootstrap 5
 - **Tooling:** Gemini AI (for refactoring and architecture)
 
+
+## 🛠 Setup Instructions
+1. Download or clone this repository.
+2. Upload the files to your PHP server (XAMPP, WAMP, or Hosting).
+3. Open your Database Manager (PHPMyAdmin).
+4. Create a new database named `kitchenhop_db`.
+5. Import the `database.sql` file included in this repository.
+
+## 🔑 Database Configuration
+- Update the `config/database.php` file with your server details:
+- Host: `localhost` (or your hosting provider's host)
+- DB Name: `kitchenhop_db`
+- User: `your_username`
+- Password: `your_password`
+
 ## 🔧 Installation & Setup
 1. Clone the repository.
 2. Import `database.sql` into your MySQL server.
