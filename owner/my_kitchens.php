@@ -1,83 +1,59 @@
 <?php
-// 1. Start session safely
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 require "../config/database.php";
 
-// 2. CRITICAL SECURITY: Check if user is logged in AND is an owner
+// Security Check
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'owner'){
     header("Location: /login.php");
     exit;
 }
 
-// 3. Fetch kitchens belonging to this owner
+// Fetch ALL kitchens belonging to THIS owner (No LIMIT here)
 $stmt = $pdo->prepare("SELECT * FROM kitchens WHERE owner_id = ? ORDER BY created_at DESC");
 $stmt->execute([$_SESSION['user_id']]);
-$kitchens = $stmt->fetchAll();
+$my_kitchens = $stmt->fetchAll();
 
 include "../includes/header.php";
 ?>
 
-<div class="d-flex justify-content-between align-middle mt-4 mb-4">
-    <h2 class="fw-bold">My Kitchen Listings</h2>
-    <a href="/owner/add_kitchen.php" class="btn btn-success">+ Add New Kitchen</a>
-</div>
-
-<div class="card shadow-sm border-0 mb-5">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Kitchen Details</th>
-                        <th>Hourly Rate</th>
-                        <th>Admin Status</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if(count($kitchens) > 0): ?>
-                        <?php foreach($kitchens as $k): ?>
-                            <tr>
-                                <td>
-                                    <div class="fw-bold"><?php echo htmlspecialchars($k['name']); ?></div>
-                                    <small class="text-muted"><?php echo htmlspecialchars($k['address']); ?></small>
-                                </td>
-                                <td class="fw-bold text-primary">€<?php echo htmlspecialchars(number_format($k['hourly_rate'], 2)); ?></td>
-                                <td>
-                                    <?php if($k['is_verified']): ?>
-                                        <span class="badge bg-success">Verified & Live</span>
-                                    <?php else: ?>
-                                        <span class="badge bg-warning text-dark">Pending Admin Approval</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="text-center">
-                                    <div class="btn-group">
-                                        <a href="/owner/edit_kitchen.php?id=<?php echo $k['id']; ?>" 
-                                           class="btn btn-outline-warning btn-sm">Edit</a>
-                                        
-                                        <a href="/owner/delete_kitchen.php?id=<?php echo $k['id']; ?>" 
-                                           class="btn btn-outline-danger btn-sm" 
-                                           onclick="return confirm('Are you sure? This will also delete all associated bookings for this kitchen.');">
-                                           Delete
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="4" class="text-center py-5 text-muted">
-                                <p class="mb-2">You haven't listed any kitchens yet.</p>
-                                <a href="/owner/add_kitchen.php" class="btn btn-primary btn-sm">List Your First Kitchen</a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">My Kitchen Listings</h2>
+        <a href="/owner/add_kitchen.php" class="btn btn-success"><i class="bi bi-plus-lg"></i> Add New Kitchen</a>
     </div>
+
+    <?php if(count($my_kitchens) > 0): ?>
+        <div class="row g-4">
+            <?php foreach($my_kitchens as $k): ?>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <img src="<?php echo (!empty($k['image_url'])) ? htmlspecialchars($k['image_url']) : 'https://via.placeholder.com/800x600?text=No+Image'; ?>" 
+                             class="card-img-top" style="height: 180px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="fw-bold"><?php echo htmlspecialchars($k['name']); ?></h5>
+                            <p class="text-muted small mb-2 text-truncate"><?php echo htmlspecialchars($k['address']); ?></p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="badge <?php echo $k['is_verified'] ? 'bg-success' : 'bg-warning text-dark'; ?>">
+                                    <?php echo $k['is_verified'] ? 'Verified' : 'Pending Review'; ?>
+                                </span>
+                                <strong class="text-primary">€<?php echo number_format($k['hourly_rate'], 2); ?>/hr</strong>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex gap-2 pb-3">
+                            <a href="/owner/edit_kitchen.php?id=<?php echo $k['id']; ?>" class="btn btn-outline-primary btn-sm flex-fill">Edit</a>
+                            <a href="/owner/delete_kitchen.php?id=<?php echo $k['id']; ?>" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this listing?')">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <div class="card p-5 text-center shadow-sm border-0">
+            <h4 class="text-muted">You haven't listed any kitchens yet.</h4>
+            <p>Start monetizing your space by clicking the button above!</p>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php include "../includes/footer.php"; ?>
