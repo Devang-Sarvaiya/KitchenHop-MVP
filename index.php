@@ -1,44 +1,97 @@
-<?php 
-// Include the global header (This already contains your working Logo and Nav!)
-include "includes/header.php"; 
+<?php
+// 1. Database connection
+require "config/database.php";
+
+// 2. Fetch dummy data/verified kitchens
+$stmt = $pdo->query("SELECT * FROM kitchens WHERE is_verified = 1 LIMIT 3");
+$kitchens = $stmt->fetchAll();
+
+include "includes/header.php";
 ?>
 
-<div class="px-4 py-5 my-5 text-center bg-light rounded-3 shadow-sm">
-    <h1 class="display-4 fw-bold text-dark">Cook Without Limits</h1>
-    <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">KitchenHop connects talented chefs with professional, fully-equipped kitchen spaces. Rent by the hour and scale your food business.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a class="btn btn-primary btn-lg px-4 gap-3" href="/register.php">Get Started Now</a>
-            <a class="btn btn-outline-secondary btn-lg px-4" href="/kitchens.php">Browse Kitchens</a>
+<header class="bg-dark text-white py-5 shadow-lg" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
+    <div class="container py-5 text-center">
+        <h1 class="display-3 fw-bold mb-3">Professional Kitchens, <span class="text-primary">On Demand</span></h1>
+        <p class="lead mb-4 mx-auto" style="max-width: 700px;">The marketplace for chefs to find licensed kitchen spaces and for owners to monetize their facilities.</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+            <a href="/register.php" class="btn btn-primary btn-lg px-4 gap-3 fw-bold">Get Started as Chef</a>
+            <a href="/register.php" class="btn btn-outline-light btn-lg px-4 fw-bold">List Your Kitchen</a>
         </div>
     </div>
-</div>
+</header>
 
-<hr class="my-5">
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-md-8">
+                <h2 class="fw-bold">Available Kitchen Providers</h2>
+                <p class="text-muted">Explore high-quality professional spaces near you.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="/login.php" class="btn btn-link text-primary fw-bold text-decoration-none">View All Listings →</a>
+            </div>
+        </div>
 
-<div class="row g-4 py-4 row-cols-1 row-cols-md-2">
-    <div class="col d-flex align-items-start">
-        <div class="card border-0 shadow-sm w-100 h-100 p-4">
-            <h3 class="fw-bold mb-3 fs-4 text-primary">For Chefs</h3>
-            <p>Find verified, professional kitchens and book them hourly. Focus on your menu while we handle the space. No long-term leases required.</p>
-            <div class="mt-auto">
-                <a href="/register.php" class="btn btn-outline-primary">Join as Chef</a>
+        <div class="row g-4">
+            <?php if (count($kitchens) > 0): ?>
+                <?php foreach ($kitchens as $k): ?>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="<?php echo htmlspecialchars($k['image_url']); ?>" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Kitchen">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="badge bg-success small">Verified</span>
+                                <span class="text-primary fw-bold">€<?php echo number_format($k['hourly_rate'], 2); ?>/hr</span>
+                            </div>
+                            <h5 class="fw-bold mb-1"><?php echo htmlspecialchars($k['name']); ?></h5>
+                            <p class="small text-muted mb-3"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($k['address']); ?></p>
+                            <a href="/login.php" class="btn btn-outline-primary w-100 btn-sm">Check Availability</a>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=800&q=80" class="card-img-top" style="height: 220px; object-fit: cover;">
+                        <div class="card-body text-center py-4">
+                            <h5 class="fw-bold">Sample Kitchen Space</h5>
+                            <p class="text-muted small">No kitchens verified yet. Please log in as Admin to verify listings.</p>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light border-top">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">How KitchenHop Works</h2>
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">1</div>
+                    <h5 class="fw-bold">Search</h5>
+                    <p class="small text-muted">Browse verified kitchens by location, price, and equipment.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">2</div>
+                    <h5 class="fw-bold">Book</h5>
+                    <p class="small text-muted">Select your hours and book instantly through our secure system.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">3</div>
+                    <h5 class="fw-bold">Cook</h5>
+                    <p class="small text-muted">Access your workspace and start creating culinary magic.</p>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div class="col d-flex align-items-start">
-        <div class="card border-0 shadow-sm w-100 h-100 p-4">
-            <h3 class="fw-bold mb-3 fs-4 text-success">For Kitchen Owners</h3>
-            <p>Monetize your unused kitchen downtime. List your commercial kitchen, set your own hourly rate, and easily approve or reject booking requests.</p>
-            <div class="mt-auto">
-                <a href="/register.php" class="btn btn-outline-success">List Your Kitchen</a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 
-<?php 
-// Include the global footer (Pushes copyright to the bottom)
-include "includes/footer.php"; 
-?>
+<?php include "includes/footer.php"; ?>
