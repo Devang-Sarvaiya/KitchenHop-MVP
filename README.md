@@ -9,6 +9,15 @@ A full-stack MVP built with PHP and MySQL that connects chefs with commercial ki
 ## 🚀 Live Demo
 https://devang.byethost7.com/
 
+🔐 Test Credentials (Demo Accounts)Use these accounts to test the different roles and the data isolation between owners:RoleEmailPasswordWhat to look forAdminadmin@kitchenhop.hopn.euadmin123Can verify all 20 kitchens.Owner 1owner@example.compasswordManages the first 15 kitchens.Owner 2sarah@example.compasswordManages the other 5 kitchens (Sarah Miller).Chefchef@example.compasswordCan browse all 20 verified kitchens.
+
+📂 Recent Updates
+Data Isolation: Implemented logic to ensure Owners only see and edit their specific listings.
+
+Landing Page Expansion: The homepage now dynamically displays up to 20 verified providers with a modern Hero design.
+
+Image Management: Added support for external image URLs in the listing and editing forms.
+
 ## 🛠 Features
 - **Role-Based Access:** Chef, Kitchen Owner, and Admin dashboards.
 - **Booking System:** Dynamic price calculation and status management (Pending/Approved/Rejected).
