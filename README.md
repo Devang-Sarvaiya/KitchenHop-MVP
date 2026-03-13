@@ -9,14 +9,20 @@ A full-stack MVP built with PHP and MySQL that connects chefs with commercial ki
 ## 🚀 Live Demo
 https://devang.byethost7.com/
 
-🔐 Test Credentials (Demo Accounts)Use these accounts to test the different roles and the data isolation between owners:RoleEmailPasswordWhat to look forAdminadmin@kitchenhop.hopn.euadmin123Can verify all 20 kitchens.Owner 1owner@example.compasswordManages the first 15 kitchens.Owner 2sarah@example.compasswordManages the other 5 kitchens (Sarah Miller).Chefchef@example.compasswordCan browse all 20 verified kitchens.
+## 🔐 Test Credentials (Demo Accounts)
 
-📂 Recent Updates
-Data Isolation: Implemented logic to ensure Owners only see and edit their specific listings.
+| Role | Email | Password | Description |
+| :--- | :--- | :--- | :--- |
+| **Admin** | admin@kitchenhop.hopn.eu | admin123 | Full oversight and verification. |
+| **Owner 1** | owner@example.com | password | Manages first 15 kitchens. |
+| **Owner 2** | sarah@example.com | password | Manages 5 kitchens (Sarah Miller). |
+| **Chef** | chef@example.com | password | Browses and books kitchens. |
 
-Landing Page Expansion: The homepage now dynamically displays up to 20 verified providers with a modern Hero design.
-
-Image Management: Added support for external image URLs in the listing and editing forms.
+## 📂 Recent Updates
+* **Dynamic Landing Page:** Redesigned with a Bootstrap 5 Hero section.
+* **Expanded Marketplace:** Added 20 verified kitchen listings for demo.
+* **Data Isolation:** Owners only see and manage their own listings.
+* **Image Support:** Integrated external Image URL support and previews.
 
 ## 🛠 Features
 - **Role-Based Access:** Chef, Kitchen Owner, and Admin dashboards.
